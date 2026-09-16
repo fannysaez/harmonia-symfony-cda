@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ album.title }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-center justify-content-center">
+            <img src="{{ asset('uploads/' ~ album.coverImage) }}" class="img-fluid rounded shadow" alt="{{ album.title }}">
+        </div>
+        <div class="col-md-8">
+            <h1>{{ album.title }}</h1>
+            <p class="text-muted fs-5">{{ album.artist.stageName }}</p>
+            <span class="badge bg-secondary mb-3">{{ album.type }}</span>
+            <p>Année de sortie : <strong>{{ album.releaseDate|date('Y') }}</strong></p>
+            <p>Total de morceaux : <strong>{{ album.tracks|length }}</strong></p>
+
+            <h4 class="mt-4">Liste des morceaux</h4>
+            <ul class="list-group">
+                {% for track in album.tracks|sort((a, b) => a.trackNumber <=> b.trackNumber) %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>{{ track.trackNumber }}.</strong> {{ track.title }}
+                            {% if track.isExplicit %}
+                                <span class="badge bg-danger ms-1">E</span>
+                            {% endif %}
+                        </span>
+                        <span class="text-muted small">
+                            {{ (track.duration / 60)|round(0, 'floor') }}:{{ '%02d'|format(track.duration % 60) }}
+                            &nbsp;·&nbsp; {{ track.listenCount }} écoutes
+                        </span>
+                    </li>
+                {% else %}
+                    <li class="list-group-item">Aucun morceau.</li>
+                {% endfor %}
+            </ul>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('app_albums') }}" class="btn btn-outline-secondary">Retour</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

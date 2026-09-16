@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Harmonia{% endblock %}
+
+{% block body %}
+
+    <h1 class="mb-4" id="albums">Les Albums</h1>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+        {% for album in albums %}
+            <div class="col">
+                <div class="card h-100 shadow-sm position-relative">
+                    <img src="{{ asset('uploads/' ~ album.coverImage) }}" class="card-img-top" alt="{{ album.title }}" style="height: 220px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ album.title }}</h5>
+                        <p class="card-text text-muted">{{ album.artist.stageName }}</p>
+                        <p class="card-text">Total de morceaux : {{ album.tracks|length }}</p>
+                        <span class="badge bg-secondary">{{ album.type }}</span>
+                    </div>
+                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
+                        {{ album.releaseDate|date('Y') }}
+                        <a href="{{ path('app_album_show', {id: album.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun album trouvé.</p>
+        {% endfor %}
+    </div>
+
+    <h1 class="mb-4" id="ep">Les EP</h1>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+        {% for ep in EP %}
+            <div class="col">
+                <div class="card h-100 shadow-sm position-relative">
+                    <img src="{{ asset('uploads/' ~ ep.coverImage) }}" class="card-img-top" alt="{{ ep.title }}" style="height: 220px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ep.title }}</h5>
+                        <p class="card-text text-muted">{{ ep.artist.stageName }}</p>
+                        <p class="card-text">Total de morceaux : {{ ep.tracks|length }}</p>
+                        <span class="badge bg-secondary">{{ ep.type }}</span>
+                    </div>
+                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
+                        {{ ep.releaseDate|date('Y') }}
+                        <a href="{{ path('app_album_show', {id: ep.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun EP trouvé.</p>
+        {% endfor %}
+    </div>
+
+    <h1 class="mb-4" id="singles">Les Singles</h1>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+        {% for single in singles %}
+            <div class="col">
+                <div class="card h-100 shadow-sm position-relative">
+                    <img src="{{ asset('uploads/' ~ single.coverImage) }}" class="card-img-top" alt="{{ single.title }}" style="height: 220px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ single.title }}</h5>
+                        <p class="card-text text-muted">{{ single.artist.stageName }}</p>
+                        <p class="card-text">Total de morceaux : {{ single.tracks|length }}</p>
+                        <span class="badge bg-secondary">{{ single.type }}</span>
+                    </div>
+                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
+                        {{ single.releaseDate|date('Y') }}
+                        <a href="{{ path('app_album_show', {id: single.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun single trouvé.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
