@@ -12,7 +12,8 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(AlbumRepository $albumRepository): Response
     {
-        $albums = $albumRepository->findAll();
+        $albums = $albumRepository->findBy([], ['releaseDate' => 'DESC'], 4);
+        $user = $this->getUser();
 
         return $this->render('home/index.html.twig', [
             'albums' => $albums,

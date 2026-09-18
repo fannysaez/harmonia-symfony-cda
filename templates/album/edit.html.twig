@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ album.title }}{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-4 text-center">
+                    <i class="bi bi-pencil me-2 text-warning"></i>Modifier {{ album.title }}
+                </h1>
+
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        <label class="form-label">Titre</label>
+                        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date de sortie</label>
+                        {{ form_widget(form.releaseDate, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image de couverture</label>
+                        {{ form_widget(form.coverImage, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Artiste</label>
+                        {{ form_widget(form.artist, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-orange" type="submit">Enregistrer</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

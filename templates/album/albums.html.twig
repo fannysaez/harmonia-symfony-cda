@@ -1,76 +1,99 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Harmonia{% endblock %}
-
+{% block title %}Albums{% endblock %}
 {% block body %}
 
-    <h1 class="mb-4" id="albums">Les Albums</h1>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
-        {% for album in albums %}
-            <div class="col">
-                <div class="card h-100 shadow-sm position-relative">
-                    <img src="{{ asset('uploads/' ~ album.coverImage) }}" class="card-img-top" alt="{{ album.title }}" style="height: 220px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ album.title }}</h5>
-                        <p class="card-text text-muted">{{ album.artist.stageName }}</p>
-                        <p class="card-text">Total de morceaux : {{ album.tracks|length }}</p>
-                        <span class="badge bg-secondary">{{ album.type }}</span>
-                    </div>
-                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
-                        {{ album.releaseDate|date('Y') }}
-                        <a href="{{ path('app_album_show', {id: album.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <p>Aucun album trouvé.</p>
-        {% endfor %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">
+            <i class="bi bi-disc me-2 text-warning"></i>Albums
+        </h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_album_add') }}" class="btn btn-orange">
+                <i class="bi bi-plus-circle me-1"></i>Ajouter un album
+            </a>
+        {% endif %}
     </div>
 
-    <h1 class="mb-4" id="ep">Les EP</h1>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
-        {% for ep in EP %}
-            <div class="col">
-                <div class="card h-100 shadow-sm position-relative">
-                    <img src="{{ asset('uploads/' ~ ep.coverImage) }}" class="card-img-top" alt="{{ ep.title }}" style="height: 220px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ ep.title }}</h5>
-                        <p class="card-text text-muted">{{ ep.artist.stageName }}</p>
-                        <p class="card-text">Total de morceaux : {{ ep.tracks|length }}</p>
-                        <span class="badge bg-secondary">{{ ep.type }}</span>
-                    </div>
-                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
-                        {{ ep.releaseDate|date('Y') }}
-                        <a href="{{ path('app_album_show', {id: ep.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <p>Aucun EP trouvé.</p>
-        {% endfor %}
-    </div>
+    <ul class="nav nav-tabs mb-4" id="albumTabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#albums">Albums</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#ep">EP</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#singles">Singles</a>
+        </li>
+    </ul>
 
-    <h1 class="mb-4" id="singles">Les Singles</h1>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
-        {% for single in singles %}
-            <div class="col">
-                <div class="card h-100 shadow-sm position-relative">
-                    <img src="{{ asset('uploads/' ~ single.coverImage) }}" class="card-img-top" alt="{{ single.title }}" style="height: 220px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ single.title }}</h5>
-                        <p class="card-text text-muted">{{ single.artist.stageName }}</p>
-                        <p class="card-text">Total de morceaux : {{ single.tracks|length }}</p>
-                        <span class="badge bg-secondary">{{ single.type }}</span>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="albums">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
+                {% for album in albums %}
+                    <div class="col">
+                        {% include 'component/album-card.html.twig' with {album: album} %}
                     </div>
-                    <div class="card-footer text-muted small d-flex justify-content-between align-items-center">
-                        {{ single.releaseDate|date('Y') }}
-                        <a href="{{ path('app_album_show', {id: single.id}) }}" class="btn btn-sm btn-outline-primary">Voir l'album</a>
-                    </div>
-                </div>
+                {% else %}
+                    <p>Aucun album trouvé.</p>
+                {% endfor %}
             </div>
-        {% else %}
-            <p>Aucun single trouvé.</p>
-        {% endfor %}
+            {% if totalPagesAlbum > 1 %}
+                <nav class="d-flex justify-content-center mb-4">
+                    <ul class="pagination">
+                        {% for i in 1..totalPagesAlbum %}
+                            <li class="page-item {% if i == pageAlbum %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_albums', {pageAlbum: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="ep">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
+                {% for ep in EP %}
+                    <div class="col">
+                        {% include 'component/album-card.html.twig' with {album: ep} %}
+                    </div>
+                {% else %}
+                    <p>Aucun EP trouvé.</p>
+                {% endfor %}
+            </div>
+            {% if totalPagesEP > 1 %}
+                <nav class="d-flex justify-content-center mb-4">
+                    <ul class="pagination">
+                        {% for i in 1..totalPagesEP %}
+                            <li class="page-item {% if i == pageEP %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_albums', {pageEP: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="singles">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
+                {% for single in singles %}
+                    <div class="col">
+                        {% include 'component/album-card.html.twig' with {album: single} %}
+                    </div>
+                {% else %}
+                    <p>Aucun single trouvé.</p>
+                {% endfor %}
+            </div>
+            {% if totalPagesSingle > 1 %}
+                <nav class="d-flex justify-content-center mb-4">
+                    <ul class="pagination">
+                        {% for i in 1..totalPagesSingle %}
+                            <li class="page-item {% if i == pageSingle %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_albums', {pageSingle: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
     </div>
 
 {% endblock %}

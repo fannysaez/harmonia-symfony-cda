@@ -1,0 +1,14 @@
+.stat-card { transition: transform .2s, box-shadow .2s; cursor: default; }
+.stat-card:hover { transform: translateY(-5px); box-shadow: 0 16px 35px rgba(0,0,0,.18) !important; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:none } }
+.fade-up { animation: fadeUp .5s ease-out both; }
+.fade-up:nth-child(1) { animation-delay: .05s }
+.fade-up:nth-child(2) { animation-delay: .12s }
+.fade-up:nth-child(3) { animation-delay: .19s }
+
+@keyframes pulse { 0%,100%{opacity:.25} 50%{opacity:.45} }
+.stat-icon { animation: pulse 3s ease-in-out infinite; }
+
+@keyframes growBar { from{width:0} to{width:var(--w)} }
+.type-bar { width:0; animation: growBar .9s ease-out .4s forwards; height:10px; border-radius:6px; }

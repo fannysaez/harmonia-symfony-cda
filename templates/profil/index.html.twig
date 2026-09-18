@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mon profil{% endblock %}
+{% block body %}
+
+    <div class="row mb-5">
+        {# Colonne gauche #}
+        <div class="col-md-4 text-center">
+            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px;">
+                <span class="text-white fs-1">{{ user.firstname|slice(0, 1)|upper }}</span>
+            </div>
+            <h2>{{ user.pseudo }}</h2>
+            <p class="text-muted">{{ user.firstname }} {{ user.lastname }}</p>
+            <p class="text-muted small">Membre depuis le {{ user.createdAt|date('d/m/Y') }}</p>
+            <p class="text-muted small mt-2">
+                <i class="bi bi-envelope me-1"></i>{{ user.email }}
+            </p>
+            <hr>
+            <a href="#" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-pencil me-1"></i>Modifier le profil
+            </a>
+        </div>
+
+        {# Colonne droite #}
+        <div class="col-md-8">
+
+            {# Stats #}
+            <div class="row text-center mb-4">
+                <div class="col">
+                    <div class="card shadow-sm p-3">
+                        <h3>{{ user.playlists|length }}</h3>
+                        <p class="text-muted mb-0">Playlists</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm p-3">
+                        <h3>{{ user.listeningHistories|length }}</h3>
+                        <p class="text-muted mb-0">Écoutes</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm p-3">
+                        <h3>{{ user.favoriteTracks|length }}</h3>
+                        <p class="text-muted mb-0">Favoris</p>
+                    </div>
+                </div>
+            </div>
+
+            {# Playlists #}
+            <h5>Mes playlists</h5>
+            <form action="{{ path('app_create_playlist') }}" method="POST" class="d-flex gap-2 mb-3">
+                <input type="text" name="name" class="form-control" placeholder="Nom de la playlist" required>
+                <input type="text" name="description" class="form-control" placeholder="Description (optionnel)">
+                <div class="d-flex align-items-center gap-1">
+                    <input type="checkbox" name="isPublic" id="isPublic" class="form-check-input">
+                    <label for="isPublic" class="form-check-label">Public</label>
+                </div>
+                <button type="submit" class="btn btn-orange">Créer</button>
+            </form>
+            <ul class="list-group mb-4">
+                {% for playlist in user.playlists %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi {% if playlist.isPublic %}bi-globe2 text-success{% else %}bi-lock text-secondary{% endif %} me-2"></i>
+                            <strong>{{ playlist.name }}</strong>
+                            {% if playlist.description %}
+                                <br><small class="text-muted ms-4">{{ playlist.description }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-secondary">{{ playlist.tracks|length }} morceaux</span>
+                            <form action="{{ path('app_delete_playlist', {id: playlist.id}) }}" method="POST">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="list-group-item text-muted">Aucune playlist.</li>
+                {% endfor %}
+            </ul>
+
+            {# Favoris #}
+            <h5>Mes favoris</h5>
+            <ul class="list-group mb-4">
+                {% for track in user.favoriteTracks %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ track.title }}</span>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-secondary">{{ track.album.title }}</span>
+                            <a href="{{ path('app_favorite', {track_id: track.id}) }}" class="btn btn-sm btn-danger">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="list-group-item text-muted">Aucun favori.</li>
+                {% endfor %}
+            </ul>
+
+            {# Historique #}
+            <h5>Historique d'écoute</h5>
+            <ul class="list-group">
+                {% for history in user.listeningHistories|slice(0, 2) %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ history.track.title }}
+                        <span class="badge bg-secondary">{{ history.track.album.title }}</span>
+                    </li>
+                {% else %}
+                    <li class="list-group-item text-muted">Aucun historique.</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+{% endblock %}

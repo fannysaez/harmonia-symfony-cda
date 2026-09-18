@@ -1,33 +1,24 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Harmonia - Albums{% endblock %}
-
+{% block title %}Harmonia{% endblock %}
 {% block body %}
-    <h1 class="mb-4">Les Albums</h1>
 
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="p-5 mb-5 bg-dark text-white rounded-3 text-center">
+        <i class="bi bi-music-note-beamed display-4"></i>
+        <h1 class="display-5 fw-bold mt-3">Bienvenue sur Harmonia</h1>
+        <p class="fs-5 text-secondary">Découvrez, écoutez et sauvegardez vos albums préférés.</p>
+        <a href="{{ path('app_albums') }}" class="btn btn-warning btn-lg me-2">Découvrir les albums</a>    </div>
+
+    <h4 class="mb-3">Dernières sorties</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
         {% for album in albums %}
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img
-                        src="{{ asset('uploads/' ~ album.coverImage) }}"
-                        class="card-img-top"
-                        alt="{{ album.title }}"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                    <div class="card-body">
-                        <h5 class="card-title">{{ album.title }}</h5>
-                        <p class="card-text text-muted">{{ album.artist.stageName }}</p>
-                        <p class="card-text">Total de morceaux : {{ album.tracks|length }}</p>
-                        <span class="badge bg-secondary">{{ album.type }}</span>
-                    </div>
-                    <div class="card-footer text-muted small">
-                        {{ album.releaseDate|date('Y') }}
-                    </div>
-                </div>
+                {% include 'component/album-card.html.twig' with {album: album} %}
             </div>
-        {% else %}
-            <p>Aucun album trouvé.</p>
         {% endfor %}
     </div>
+
+    <div class="text-center">
+        <a href="{{ path('app_albums') }}" class="btn btn-warning">Voir tous les albums</a>
+    </div>
+
 {% endblock %}

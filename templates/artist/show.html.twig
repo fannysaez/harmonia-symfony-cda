@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ artist.stageName }}{% endblock %}
+
+{% block body %}
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_artist_list') }}">Artistes</a></li>
+            <li class="breadcrumb-item active text-white-50">{{ artist.stageName }}</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center text-dark fw-bold fs-4"
+                         style="width:64px; height:64px; flex-shrink:0;">
+                        {{ artist.stageName|first|upper }}
+                    </div>
+                    <div>
+                        <h2 class="fw-bold mb-1 text-dark">{{ artist.stageName }}</h2>
+                        <span class="badge bg-secondary">{{ artist.country }}</span>
+                    </div>
+                </div>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_artist_edit', {id: artist.id}) }}" class="btn btn-outline-warning fw-semibold">
+                    <i class="bi bi-pencil me-1"></i> Modifier
+                </a>
+                {% endif %}
+            </div>
+
+            {% if artist.biography %}
+            <hr>
+            <h6 class="fw-semibold text-muted mb-2">Biographie</h6>
+            <p class="mb-0">{{ artist.biography }}</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-disc text-warning me-2"></i>Albums
+                <span class="badge bg-warning text-dark ms-2">{{ artist.albums|length }}</span>
+            </h5>
+
+            {% if artist.albums|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Titre</th>
+                            <th>Type</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for album in artist.albums %}
+                        <tr>
+                            <td class="fw-semibold">{{ album.title }}</td>
+                            <td><span class="badge bg-warning text-dark">{{ album.type }}</span></td>
+                            <td class="text-end">
+                                <a href="{{ path('app_album_show', {id: album.id}) }}" class="btn btn-sm btn-outline-secondary" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">Aucun album pour cet artiste.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

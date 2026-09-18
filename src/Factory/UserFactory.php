@@ -2,6 +2,7 @@
 
 namespace App\Factory;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
@@ -19,8 +20,7 @@ final class UserFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct() {}
-
+    public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
     #[\Override]
     public static function class(): string
     {
@@ -38,10 +38,12 @@ final class UserFactory extends PersistentProxyObjectFactory
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('-2 years', 'now')),
             'email' => self::faker()->unique()->safeEmail(),
-            'password' => 'password123', // Valeur temporaire
+            'password' => 'placeholder', // Valeur temporaire
             'pseudo' => self::faker()->userName(),
             'roles' => ['ROLE_USER'],
             'favoriteTracks' => TrackFactory::randomSet(self::faker()->numberBetween(2, 8)),
+            'firstname' => self::faker()->firstName(),
+            'lastname' => self::faker()->lastName(),
         ];
     }
 
@@ -51,8 +53,10 @@ final class UserFactory extends PersistentProxyObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(User $user): void {})
-        ;
+        return $this->afterInstantiate(function (User $user): void {
+            $user->setPassword(
+                $this->passwordHasher->hashPassword($user, $_ENV['FIXTURE_PASSWORD'])
+            );
+        });
     }
 }

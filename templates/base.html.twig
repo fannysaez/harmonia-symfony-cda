@@ -6,34 +6,93 @@
         <title>{% block title %}Harmonia{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            body {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+
+            }
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            .btn-orange {
+                background-color: #fd7e14;
+                color: white;
+                border: none;
+            }
+            .btn-orange:hover {
+                background-color: #e06c0e;
+                color: white;
+            }
+            .btn-outline-orange {
+                color: #fd7e14;
+                border: 1px solid #fd7e14;
+                background: transparent;
+            }
+            .btn-outline-orange:hover {
+                background-color: #fd7e14;
+                color: white;
+            }
+            .nav-tabs .nav-link.active {
+                color: #fd7e14;
+                border-color: #fd7e14 #fd7e14 #fff;
+            }
+            .nav-tabs .nav-link {
+                color: #fd7e14;
+            }
+            .nav-tabs .nav-link:hover {
+                border-color: #fd7e14 #fd7e14 #fff;
+            }
+            .form-check-input:checked {
+                background-color: #fd7e14;
+                border-color: #fd7e14;
+            }
+            .form-check-input:focus {
+                border-color: #fd7e14;
+                box-shadow: 0 0 0 0.25rem rgba(253, 126, 20, 0.25);
+            }
+            .breadcrumb-item a {
+                color: #fd7e14;
+                text-decoration: none;
+            }
+            .breadcrumb-item a:hover {
+                color: #e06c0e;
+            }
+            .page-link {
+                color: #fd7e14;
+                border-color: #fd7e14;
+            }
+            .page-link:hover {
+                background-color: #fd7e14;
+                color: white;
+                border-color: #fd7e14;
+            }
+            .page-item.active .page-link {
+                background-color: #fd7e14;
+                border-color: #fd7e14;
+                color: white;
+            }
+            .pagination {
+                gap: 5px;
+            }
+        </style>
         {% block stylesheets %}{% endblock %}
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ path('app_home') }}">Harmonia</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_albums') }}">Albums</a>
-                        </li>
+        {% include 'component/navbar.html.twig' %}
 
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="container mt-4">
+        <main class="{% block main_class %}container mt-5 pt-3{% endblock %}">
             {% block body %}{% endblock %}
         </main>
 
+        {% include 'component/footer.html.twig' %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+     {% block javascripts %}{% endblock %}
+
     </body>
 </html>

@@ -4,39 +4,75 @@
 
 {% block body %}
 
-    <div class="row">
-        <div class="col-md-4 d-flex align-items-center justify-content-center">
-            <img src="{{ asset('uploads/' ~ album.coverImage) }}" class="img-fluid rounded shadow" alt="{{ album.title }}">
-        </div>
-        <div class="col-md-8">
-            <h1>{{ album.title }}</h1>
-            <p class="text-muted fs-5">{{ album.artist.stageName }}</p>
-            <span class="badge bg-secondary mb-3">{{ album.type }}</span>
-            <p>Année de sortie : <strong>{{ album.releaseDate|date('Y') }}</strong></p>
-            <p>Total de morceaux : <strong>{{ album.tracks|length }}</strong></p>
+    <nav aria-label="breadcrumb" class="mb-3 mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_albums') }}">Albums</a></li>
+            <li class="breadcrumb-item active">{{ album.title }}</li>
+        </ol>
+    </nav>
 
-            <h4 class="mt-4">Liste des morceaux</h4>
+    <div class="row mb-5">
+        <div class="col-md-4 text-center mb-4">
+            <img src="{{ asset('uploads/' ~ album.coverImage) }}" class="img-fluid rounded shadow" alt="{{ album.title }}" style="max-height: 320px; object-fit: cover;">
+            <div class="mt-3">
+                <span class="badge bg-secondary mb-2">{{ album.type }}</span>
+                <p class="text-muted small mb-1"><i class="bi bi-calendar me-1"></i>{{ album.releaseDate|date('Y') }}</p>
+                <p class="text-muted small"><i class="bi bi-music-note me-1"></i>{{ album.tracks|length }} morceaux</p>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h1 class="mb-1">{{ album.title }}</h1>
+            <p class="text-muted fs-5 mb-4">
+                <i class="bi bi-person me-1"></i>{{ album.artist.stageName }}
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Liste des morceaux</h5>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_add_track', {album_id: album.id}) }}" class="btn btn-sm btn-orange">
+                        <i class="bi bi-plus-circle me-1"></i>Ajouter une musique
+                    </a>
+                {% endif %}
+            </div>
+
             <ul class="list-group">
                 {% for track in album.tracks|sort((a, b) => a.trackNumber <=> b.trackNumber) %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>
-                            <strong>{{ track.trackNumber }}.</strong> {{ track.title }}
+                            <strong class="text-muted me-2">{{ track.trackNumber }}.</strong>{{ track.title }}
                             {% if track.isExplicit %}
                                 <span class="badge bg-danger ms-1">E</span>
                             {% endif %}
                         </span>
-                        <span class="text-muted small">
-                            {{ (track.duration / 60)|round(0, 'floor') }}:{{ '%02d'|format(track.duration % 60) }}
-                            &nbsp;·&nbsp; {{ track.listenCount }} écoutes
-                        </span>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="text-muted small">
+                                {{ (track.duration / 60)|round(0, 'floor') }}:{{ '%02d'|format(track.duration % 60) }}
+                                &nbsp;·&nbsp; {{ track.listenCount }} écoutes
+                            </span>
+                            {% if app.user %}
+                                <a href="{{ path('app_favorite', {track_id: track.id}) }}"
+                                    class="btn btn-sm {% if track in app.user.favoriteTracks %}btn-danger{% else %}btn-outline-danger{% endif %}"
+                                >
+                                    {% if track in app.user.favoriteTracks %}
+                                        <i class="bi bi-heart-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-heart"></i>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
                     </li>
                 {% else %}
                     <li class="list-group-item">Aucun morceau.</li>
                 {% endfor %}
             </ul>
 
-            <div class="text-center mt-4">
-                <a href="{{ path('app_albums') }}" class="btn btn-outline-secondary">Retour</a>
+            <div class="mt-4 text-center">
+                <a href="{{ path('app_albums') }}" class="btn btn-outline-secondary">
+                    Retour
+                </a>
             </div>
         </div>
     </div>
