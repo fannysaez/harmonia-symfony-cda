@@ -3,15 +3,15 @@
 {% block title %}Ajouter un album{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h1 class="h4 mb-4 text-center">
-                    <i class="bi bi-disc me-2 text-warning"></i>Ajouter un album
-                </h1>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-4 text-center">
+                        <i class="bi bi-disc me-2 text-warning"></i>Ajouter un album
+                    </h1>
 
-                {{ form_start(form) }}
+                    {{ form_start(form) }}
                     <div class="mb-3">
                         <label class="form-label">Titre</label>
                         {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
@@ -22,7 +22,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Image de couverture</label>
-                        {{ form_widget(form.coverImage, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_widget(form.coverImageFile, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Type</label>
@@ -35,10 +35,10 @@
                     <div class="d-grid">
                         <button class="btn btn-orange" type="submit">Ajouter</button>
                     </div>
-                {{ form_end(form, {'render_rest': false}) }}
+                    {{ form_end(form) }}
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

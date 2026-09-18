@@ -5,8 +5,10 @@ use App\Entity\Album;
 use App\Entity\Artist;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class AlbumType extends AbstractType
 {
@@ -15,7 +17,19 @@ class AlbumType extends AbstractType
         $builder
             ->add('title')
             ->add('releaseDate')
-            ->add('coverImage')
+            ->add('coverImageFile', FileType::class, [
+                'label' => 'Image de couverture',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'mimeTypesMessage' => 'Formats acceptés : JPG, PNG, WebP',
+                    ])
+                ],
+                'attr' => ['class' => 'form-control', 'accept' => 'image/*'],
+            ])
             ->add('type')
             ->add('artist', EntityType::class, [
                 'class' => Artist::class,
@@ -30,6 +44,4 @@ class AlbumType extends AbstractType
             'data_class' => Album::class,
         ]);
     }
-
-
 }

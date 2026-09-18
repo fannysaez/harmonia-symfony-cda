@@ -7,10 +7,12 @@ use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class AlbumController extends AbstractController
 {
@@ -57,17 +59,37 @@ final class AlbumController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/album-add', name: 'app_album_add')]
-    public function add(EntityManagerInterface $em, Request $request): Response
+    public function add(EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response
     {
         $album = new Album();
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile|null $coverFile */
+            $coverFile = $form->get('coverImageFile')->getData();
+
+            if ($coverFile) {
+                $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $coverFile->guessExtension();
+
+                $coverFile->move(
+                    $this->getParameter('covers_directory'),
+                    $newFilename
+                );
+
+                $album->setCoverImage($newFilename);
+            }
+
             $album->setCreatedAt(new \DateTimeImmutable());
             $em->persist($album);
             $em->flush();
+
             return $this->redirectToRoute('app_albums');
         }
+
         return $this->render('album/add.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -75,18 +97,38 @@ final class AlbumController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/album-edit/{id}', name: 'app_album_edit')]
-    public function edit(int $id, AlbumRepository $albumRepository, EntityManagerInterface $em, Request $request): Response
+    public function edit(int $id, AlbumRepository $albumRepository, EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response
     {
         $album = $albumRepository->find($id);
         if ($album === null) {
             return $this->redirectToRoute('app_albums');
         }
+
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile|null $coverFile */
+            $coverFile = $form->get('coverImageFile')->getData();
+
+            if ($coverFile) {
+                $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $coverFile->guessExtension();
+
+                $coverFile->move(
+                    $this->getParameter('covers_directory'),
+                    $newFilename
+                );
+
+                $album->setCoverImage($newFilename);
+            }
+
             $em->flush();
             return $this->redirectToRoute('app_albums');
         }
+
         return $this->render('album/edit.html.twig', [
             'form' => $form->createView(),
             'album' => $album,
