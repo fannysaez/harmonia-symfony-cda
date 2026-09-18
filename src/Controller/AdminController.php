@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Controller;
 
 use App\Repository\AlbumRepository;
 use App\Repository\ArtistRepository;
 use App\Repository\TrackRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,6 +25,21 @@ final class AdminController extends AbstractController
             'totalAlbums'  => count($albumRepository->findAll()),
             'totalTracks'  => count($trackRepository->findAll()),
             'lastAlbums'   => $albumRepository->findLastAdded(5),
+        ]);
+    }
+    #[Route('/admin/tracks', name: 'app_admin_tracks')]
+    public function tracks(TrackRepository $trackRepository): Response
+    {
+        return $this->render('admin/tracks.html.twig', [
+            'tracks' => $trackRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/admin/users', name: 'app_admin_users')]
+    public function users(UserRepository $userRepository): Response
+    {
+        return $this->render('admin/users.html.twig', [
+            'users' => $userRepository->findAll(),
         ]);
     }
 }

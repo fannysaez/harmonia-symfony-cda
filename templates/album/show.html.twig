@@ -51,8 +51,17 @@
                                 {{ (track.duration / 60)|round(0, 'floor') }}:{{ '%02d'|format(track.duration % 60) }}
                                 &nbsp;·&nbsp; {{ track.listenCount }} écoutes
                             </span>
+
+                            <form method="post" action="{{ path('app_track_listen', {id: track.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('listen' ~ track.id) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-success" title="Écouter">
+                                    <i class="bi bi-play-circle"></i>
+                                </button>
+                            </form>
+
                             {% if app.user %}
-                                <a href="{{ path('app_favorite', {track_id: track.id}) }}"
+                                <a
+                                    href="{{ path('app_favorite', {track_id: track.id}) }}"
                                     class="btn btn-sm {% if track in app.user.favoriteTracks %}btn-danger{% else %}btn-outline-danger{% endif %}"
                                 >
                                     {% if track in app.user.favoriteTracks %}
@@ -60,6 +69,11 @@
                                     {% else %}
                                         <i class="bi bi-heart"></i>
                                     {% endif %}
+                                </a>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_track_edit', {id: track.id}) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                             {% endif %}
                         </div>

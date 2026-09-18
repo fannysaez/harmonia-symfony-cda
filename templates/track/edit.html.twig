@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ track.title }}{% endblock %}
+
+{% block body %}
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_albums') }}">Albums</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_album_show', {id: album.id}) }}">{{ album.title }}</a></li>
+            <li class="breadcrumb-item active text-white-50">Modifier la track</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm mx-auto" style="max-width: 600px; border-radius: 16px;">
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-1 text-dark">
+                <i class="bi bi-pencil-square text-warning me-2"></i>Modifier la track
+            </h4>
+            <p class="text-muted mb-4 small">Album : <strong>{{ album.title }}</strong></p>
+
+            {{ form_start(form) }}
+
+                <div class="mb-3">
+                    {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.title) }}
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        {{ form_label(form.duration, 'Durée (en secondes)', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.duration) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_label(form.trackNumber, 'Numéro de piste', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.trackNumber, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.trackNumber) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.genres, 'Genres', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.genres, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.genres) }}
+                    <div class="form-text">Maintiens Ctrl pour sélectionner plusieurs genres.</div>
+                </div>
+
+                <div class="mb-4 form-check">
+                    {{ form_widget(form.isExplicit, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form.isExplicit, 'Contenu explicite', {'label_attr': {'class': 'form-check-label'}}) }}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning fw-semibold">
+                        <i class="bi bi-check-circle me-1"></i> Enregistrer
+                    </button>
+                    <a href="{{ path('app_album_show', {id: album.id}) }}" class="btn btn-outline-secondary">
+                        Annuler
+                    </a>
+                </div>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -42,4 +42,34 @@ final class TrackController extends AbstractController
             'album' => $album,
         ]);
     }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/edit-track/{id}', name: 'app_track_edit')]
+    public function edit(Track $track, EntityManagerInterface $em, Request $request): Response
+    {
+        $form = $this->createForm(TrackType::class, $track);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('app_album_show', ['id' => $track->getAlbum()->getId()]);
+        }
+
+        return $this->render('track/edit.html.twig', [
+            'form' => $form->createView(),
+            'track' => $track,
+            'album' => $track->getAlbum(),
+        ]);
+    }
+
+    #[Route('/track/{id}/listen', name: 'app_track_listen', methods: ['POST'])]
+public function listen(Track $track, EntityManagerInterface $em, Request $request): Response
+{
+    if ($this->isCsrfTokenValid('listen' . $track->getId(), $request->request->get('_token'))) {
+        $track->setListenCount($track->getListenCount() + 1);
+        $em->flush();
+    }
+
+    return $this->redirectToRoute('app_album_show', ['id' => $track->getAlbum()->getId()]);
+}
 }

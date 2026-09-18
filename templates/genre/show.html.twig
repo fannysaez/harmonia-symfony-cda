@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block title %}Genre : {{ genre.name }}{% endblock %}
+{% block body %}
+<div class="mt-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_genre_list') }}">Genres</a></li>
+            <li class="breadcrumb-item active">{{ genre.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <span class="badge fs-5" style="background-color: {{ genre.color }}">{{ genre.name }}</span>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_genre_edit', {id: genre.id}) }}" class="btn btn-sm btn-outline-warning">
+                <i class="bi bi-pencil"></i> Modifier
+            </a>
+        {% endif %}
+    </div>
+
+    <h5>Morceaux associés</h5>
+    <ul class="list-group">
+        {% for track in genre.tracks %}
+            <li class="list-group-item">{{ track.title }}</li>
+        {% else %}
+            <li class="list-group-item">Aucun morceau.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
