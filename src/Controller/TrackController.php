@@ -62,11 +62,22 @@ final class TrackController extends AbstractController
         ]);
     }
 
-    #[Route('/track/{id}/listen', name: 'app_track_listen', methods: ['POST'])]
+#[Route('/track/{id}/listen', name: 'app_track_listen', methods: ['POST'])]
 public function listen(Track $track, EntityManagerInterface $em, Request $request): Response
 {
     if ($this->isCsrfTokenValid('listen' . $track->getId(), $request->request->get('_token'))) {
         $track->setListenCount($track->getListenCount() + 1);
+
+        $user = $this->getUser();
+        if ($user) {
+            $history = new \App\Entity\ListeningHistory();
+            $history->setTrack($track);
+            $history->setUser($user);
+            $history->setListenedAt(new \DateTimeImmutable());
+            $history->setCreatedAt(new \DateTimeImmutable());
+            $em->persist($history);
+        }
+
         $em->flush();
     }
 

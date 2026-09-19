@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block title %}Artistes - Admin{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+{% block body %}
+<div class="d-flex">
+    {% include 'admin/_sidebar.html.twig' %}
+    <div class="flex-grow-1 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">Artistes</h2>
+            <a href="{{ path('app_artist_add') }}" class="btn btn-warning fw-semibold">
+                <i class="bi bi-person-plus-fill me-1"></i> Ajouter
+            </a>
+        </div>
+        <div class="card border-0 shadow-sm" style="border-radius:16px;">
+            <div class="card-body p-4">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nom de scène</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for artist in artists %}
+                        <tr>
+                            <td class="fw-semibold">{{ artist.stageName }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('app_artist_show', {id: artist.id}) }}" class="btn btn-sm btn-outline-secondary" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_artist_edit', {id: artist.id}) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted py-4">Aucun artiste.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

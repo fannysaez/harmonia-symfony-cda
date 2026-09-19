@@ -9,10 +9,8 @@
 {% block body %}
     <div class="d-flex">
 
-        {# ── Sidebar ── #}
-
         {% include 'admin/_sidebar.html.twig' %}
-        {# ── Main content ── #}
+
         <div class="flex-grow-1 p-4">
 
             {# Header #}
@@ -37,7 +35,7 @@
 
             {# Stat cards #}
             <div class="row g-3 mb-4">
-                <div class="col-md-4 fade-up">
+                <div class="col-md-3 fade-up">
                     <div class="card stat-card border-0 text-white h-100" style="background: linear-gradient(135deg,#f97316,#fb923c); border-radius:16px;">
                         <div class="card-body d-flex align-items-center justify-content-between p-4">
                             <div>
@@ -53,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 fade-up">
+                <div class="col-md-3 fade-up">
                     <div class="card stat-card border-0 text-white h-100" style="background: linear-gradient(135deg,#8b5cf6,#a78bfa); border-radius:16px;">
                         <div class="card-body d-flex align-items-center justify-content-between p-4">
                             <div>
@@ -69,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 fade-up">
+                <div class="col-md-3 fade-up">
                     <div class="card stat-card border-0 text-white h-100" style="background: linear-gradient(135deg,#0ea5e9,#38bdf8); border-radius:16px;">
                         <div class="card-body d-flex align-items-center justify-content-between p-4">
                             <div>
@@ -82,6 +80,22 @@
                             <span class="text-white small" style="opacity:.75;">
                                 <i class="bi bi-info-circle me-1"></i>Total des musiques
                             </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 fade-up">
+                    <div class="card stat-card border-0 text-white h-100" style="background: linear-gradient(135deg,#10b981,#34d399); border-radius:16px;">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <p class="mb-1 fw-semibold" style="opacity:.85; font-size:.85rem; letter-spacing:.05em; text-transform:uppercase;">Playlists</p>
+                                <h2 class="fw-bold mb-0 display-5" data-counter="{{ totalPlaylists }}">0</h2>
+                            </div>
+                            <i class="bi bi-collection-play stat-icon" style="font-size:3rem;"></i>
+                        </div>
+                        <div class="card-footer border-0 bg-transparent px-4 pb-3 pt-0">
+                            <a href="{{ path('app_playlist_index') }}" class="text-white text-decoration-none small">
+                                <i class="bi bi-arrow-right-circle me-1"></i>Voir mes playlists
+                            </a>
                         </div>
                     </div>
                 </div>

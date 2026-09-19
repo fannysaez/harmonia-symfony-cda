@@ -60,9 +60,9 @@
                             </form>
 
                             {% if app.user %}
-                                <a
-                                    href="{{ path('app_favorite', {track_id: track.id}) }}"
-                                    class="btn btn-sm {% if track in app.user.favoriteTracks %}btn-danger{% else %}btn-outline-danger{% endif %}"
+
+                                <a href="{{ path('app_favorite', {track_id: track.id}) }}"
+                                class="btn btn-sm {% if track in app.user.favoriteTracks %}btn-danger{% else %}btn-outline-danger{% endif %}"
                                 >
                                     {% if track in app.user.favoriteTracks %}
                                         <i class="bi bi-heart-fill"></i>
@@ -70,7 +70,26 @@
                                         <i class="bi bi-heart"></i>
                                     {% endif %}
                                 </a>
+
+                                {% if app.user.playlists|length > 0 %}
+                                    <form method="post">
+                                        <select
+                                            class="form-select form-select-sm"
+                                            style="width: auto;"
+                                            onchange="this.form.action = this.value; this.form.submit()"
+                                        >
+                                            <option value="">+ Playlist</option>
+                                            {% for playlist in app.user.playlists %}
+                                                <option value="{{ path('app_playlist_add_track', {id: playlist.id, track_id: track.id}) }}">
+                                                    {{ playlist.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                {% endif %}
+
                             {% endif %}
+
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('app_track_edit', {id: track.id}) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
                                     <i class="bi bi-pencil"></i>

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-4 text-center">
+                    <i class="bi bi-person-circle me-2 text-warning"></i>Modifier mon profil
+                </h1>
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        <label class="form-label">Pseudo</label>
+                        {{ form_widget(form.pseudo) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prénom</label>
+                        {{ form_widget(form.firstname) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        {{ form_widget(form.lastname) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nouveau mot de passe <span class="text-muted small">(laisser vide pour ne pas changer)</span></label>
+                        {{ form_widget(form.plainPassword) }}
+                    </div>
+
+                    <div class="d-grid mb-2">
+                        <button class="btn btn-orange" type="submit">Enregistrer</button>
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ path('app_profil') }}" class="text-muted small">Annuler</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

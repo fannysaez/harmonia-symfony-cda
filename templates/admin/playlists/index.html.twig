@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des playlists{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex">
+
+        {% include 'admin/_sidebar.html.twig' %}
+
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="fw-bold mb-0">
+                    <i class="bi bi-collection-play text-warning me-2"></i>Playlists
+                </h2>
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+
+            <div class="card border-0 shadow-sm" style="border-radius:16px;">
+                <div class="card-body p-4">
+                    {% if playlists|length == 0 %}
+                        <p class="text-muted mb-0">Aucune playlist pour le moment.</p>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Propriétaire</th>
+                                        <th>Morceaux</th>
+                                        <th>Publique</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for playlist in playlists %}
+                                        <tr>
+                                            <td class="fw-semibold">{{ playlist.name }}</td>
+                                            <td class="text-muted">{{ playlist.user.pseudo }}</td>
+                                            <td>{{ playlist.tracks|length }}</td>
+                                            <td>
+                                                {% if playlist.isPublic %}
+                                                    <span class="badge bg-success">Oui</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Non</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ path('app_playlist_edit', {id: playlist.id}) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form method="post" action="{{ path('app_delete_playlist', {id: playlist.id}) }}" class="d-inline">
+                                                    <input type="hidden" name="redirect" value="admin">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cette playlist ?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

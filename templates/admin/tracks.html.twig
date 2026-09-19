@@ -46,6 +46,25 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
+                {% if totalPages > 1 %}
+                    <nav class="d-flex justify-content-center mt-3">
+                        <ul class="pagination">
+                            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                                <a class="page-link" href="{{ path('app_admin_tracks', {page: page - 1}) }}">«</a>
+                            </li>
+                            {% for i in 1..totalPages %}
+                                <li class="page-item {% if i == page %}active{% endif %}">
+                                    <a class="page-link" href="{{ path('app_admin_tracks', {page: i}) }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                            <li class="page-item {% if page == totalPages %}disabled{% endif %}">
+                                <a class="page-link" href="{{ path('app_admin_tracks', {page: page + 1}) }}">»</a>
+                            </li>
+                        </ul>
+                    </nav>
+                {% endif %}
+
             </div>
         </div>
     </div>

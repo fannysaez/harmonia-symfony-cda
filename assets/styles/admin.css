@@ -12,3 +12,18 @@
 
 @keyframes growBar { from{width:0} to{width:var(--w)} }
 .type-bar { width:0; animation: growBar .9s ease-out .4s forwards; height:10px; border-radius:6px; }
+
+.pagination .page-link {
+    color: #fd7e14;
+    border-color: #dee2e6;
+}
+.pagination .page-item.active .page-link {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+    color: white;
+}
+.pagination .page-link:hover {
+    color: #fff;
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+}
