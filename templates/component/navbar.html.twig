@@ -14,6 +14,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_albums') }}">Albums</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        Genres
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for genre in getGenres() %}
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_genre_list') }}">
+                                    <span class="badge me-1" style="background-color: {{ genre.color }}"> </span>
+                                    {{ genre.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
                 {% if app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_profil') }}">Mon profil</a>
