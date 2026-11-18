@@ -1,4 +1,4 @@
-# Harmonia - App Web Streaming Musical
+# Harmonia - App Web Streaming Musical -
 
 **Harmonia** est une application web de streaming musical développée avec **Symfony 7**, dans le cadre d'un projet de formation. Elle permet aux utilisateurs de découvrir des albums, des artistes et des genres musicaux, de gérer leurs favoris et leurs playlists, et aux administrateurs de gérer l'ensemble du contenu via un tableau de bord dédié.
 
