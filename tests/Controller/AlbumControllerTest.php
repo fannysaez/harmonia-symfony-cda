@@ -2,9 +2,9 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use App\Repository\UserRepository;
 use App\Repository\AlbumRepository;
+use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AlbumControllerTest extends WebTestCase
 {
@@ -21,7 +21,7 @@ class AlbumControllerTest extends WebTestCase
         $albumRepository = static::getContainer()->get(AlbumRepository::class);
         $album = $albumRepository->findOneBy([]);
 
-        $client->request('GET', '/album/' . $album->getId());
+        $client->request('GET', '/album/'.$album->getId());
         $this->assertResponseIsSuccessful();
     }
 

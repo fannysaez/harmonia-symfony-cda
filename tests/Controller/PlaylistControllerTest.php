@@ -2,8 +2,8 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PlaylistControllerTest extends WebTestCase
 {
@@ -13,6 +13,7 @@ class PlaylistControllerTest extends WebTestCase
         $client->request('GET', '/playlists');
         $this->assertResponseRedirects('/login');
     }
+
     public function testPlaylistsPageWhenLoggedIn(): void
     {
         $client = static::createClient();

@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\AlbumRepository;
 use App\Repository\ArtistRepository;
 use App\Repository\GenreRepository;
-use App\Repository\AlbumRepository;
 use App\Repository\PlaylistRepository;
 use App\Repository\TrackRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -22,14 +22,14 @@ final class AdminController extends AbstractController
         ArtistRepository $artistRepository,
         AlbumRepository $albumRepository,
         TrackRepository $trackRepository,
-        PlaylistRepository $playlistRepository
+        PlaylistRepository $playlistRepository,
     ): Response {
         return $this->render('admin/index.html.twig', [
-            'totalArtists'   => count($artistRepository->findAll()),
-            'totalAlbums'    => count($albumRepository->findAll()),
-            'totalTracks'    => count($trackRepository->findAll()),
+            'totalArtists' => count($artistRepository->findAll()),
+            'totalAlbums' => count($albumRepository->findAll()),
+            'totalTracks' => count($trackRepository->findAll()),
             'totalPlaylists' => count($playlistRepository->findAll()),
-            'lastAlbums'     => $albumRepository->findLastAdded(5),
+            'lastAlbums' => $albumRepository->findLastAdded(5),
         ]);
     }
 
@@ -49,11 +49,12 @@ final class AdminController extends AbstractController
             ->getResult();
 
         return $this->render('admin/albums/index.html.twig', [
-            'albums'      => $albums,
-            'page'        => $page,
-            'totalPages'  => $totalPages,
+            'albums' => $albums,
+            'page' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
+
     #[Route('/admin/tracks', name: 'app_admin_tracks')]
     public function tracks(TrackRepository $trackRepository, Request $request): Response
     {
@@ -70,11 +71,12 @@ final class AdminController extends AbstractController
             ->getResult();
 
         return $this->render('admin/tracks.html.twig', [
-            'tracks'     => $tracks,
-            'page'       => $page,
+            'tracks' => $tracks,
+            'page' => $page,
             'totalPages' => $totalPages,
         ]);
     }
+
     #[Route('/admin/playlists', name: 'app_admin_playlists')]
     public function playlists(PlaylistRepository $playlistRepository): Response
     {

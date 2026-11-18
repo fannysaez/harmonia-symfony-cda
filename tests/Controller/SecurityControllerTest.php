@@ -14,6 +14,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Connexion');
     }
+
     public function testRegisterPage(): void
     {
         $client = static::createClient();

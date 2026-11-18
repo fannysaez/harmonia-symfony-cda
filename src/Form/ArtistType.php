@@ -5,10 +5,10 @@ namespace App\Form;
 use App\Entity\Artist;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArtistType extends AbstractType
 {
@@ -37,7 +37,6 @@ class ArtistType extends AbstractType
             // ->add('submit', SubmitType::class)
         ;
     }
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

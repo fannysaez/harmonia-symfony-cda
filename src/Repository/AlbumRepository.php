@@ -53,7 +53,7 @@ class AlbumRepository extends ServiceEntityRepository
             ->setParameter('type', $type)
             ->orderBy('a.releaseDate', 'DESC');
 
-        if ($limit !== null) {
+        if (null !== $limit) {
             $qb->setMaxResults($limit);
         }
 

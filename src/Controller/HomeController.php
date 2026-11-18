@@ -13,8 +13,8 @@ final class HomeController extends AbstractController
     public function index(AlbumRepository $albumRepository): Response
     {
         return $this->render('home/index.html.twig', [
-            'albums'  => $albumRepository->findWithRelations('album'),
-            'eps'     => $albumRepository->findWithRelations('ep'),
+            'albums' => $albumRepository->findWithRelations('album'),
+            'eps' => $albumRepository->findWithRelations('ep'),
             'singles' => $albumRepository->findWithRelations('single'),
         ]);
     }

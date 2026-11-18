@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Genre;
@@ -30,8 +31,10 @@ class GenreController extends AbstractController
             $genre->setCreatedAt(new \DateTimeImmutable());
             $em->persist($genre);
             $em->flush();
+
             return $this->redirectToRoute('app_genre_list');
         }
+
         return $this->render('genre/add.html.twig', ['form' => $form->createView()]);
     }
 
@@ -42,18 +45,21 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+
             return $this->redirectToRoute('app_genre_list');
         }
+
         return $this->render('genre/edit.html.twig', ['form' => $form->createView(), 'genre' => $genre]);
     }
 
     #[Route('/admin/genre/{id}/remove', name: 'app_genre_remove', methods: ['POST'])]
     public function remove(Genre $genre, EntityManagerInterface $em, Request $request): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $genre->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->request->get('_token'))) {
             $em->remove($genre);
             $em->flush();
         }
+
         return $this->redirectToRoute('app_genre_list');
     }
 }

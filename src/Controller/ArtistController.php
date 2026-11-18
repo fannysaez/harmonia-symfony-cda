@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Artist;
@@ -17,6 +18,7 @@ final class ArtistController extends AbstractController
     public function list(ArtistRepository $artistRepository): Response
     {
         $artists = $artistRepository->findAll();
+
         return $this->render('artist/list.html.twig', [
             'artists' => $artists,
         ]);
@@ -26,9 +28,10 @@ final class ArtistController extends AbstractController
     public function show(int $id, ArtistRepository $artistRepository): Response
     {
         $artist = $artistRepository->find($id);
-        if ($artist === null) {
+        if (null === $artist) {
             return $this->redirectToRoute('app_artist_list');
         }
+
         return $this->render('artist/show.html.twig', [
             'artist' => $artist,
         ]);
@@ -45,8 +48,10 @@ final class ArtistController extends AbstractController
             $artist->setCreatedAt(new \DateTimeImmutable());
             $em->persist($artist);
             $em->flush();
+
             return $this->redirectToRoute('app_artist_list');
         }
+
         return $this->render('artist/add.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -57,15 +62,17 @@ final class ArtistController extends AbstractController
     public function edit(int $id, ArtistRepository $artistRepository, EntityManagerInterface $em, Request $request): Response
     {
         $artist = $artistRepository->find($id);
-        if ($artist === null) {
+        if (null === $artist) {
             return $this->redirectToRoute('app_artist_list');
         }
         $form = $this->createForm(ArtistType::class, $artist);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+
             return $this->redirectToRoute('app_artist_list');
         }
+
         return $this->render('artist/edit.html.twig', [
             'form' => $form->createView(),
             'artist' => $artist,

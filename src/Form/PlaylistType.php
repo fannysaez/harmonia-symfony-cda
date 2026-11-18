@@ -15,7 +15,7 @@ class PlaylistType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la playlist',
-                'attr'  => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control'],
             ]);
     }
 

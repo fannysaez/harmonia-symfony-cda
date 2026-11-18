@@ -19,7 +19,7 @@ final class TrackController extends AbstractController
     public function add(int $album_id, AlbumRepository $albumRepository, EntityManagerInterface $em, Request $request): Response
     {
         $album = $albumRepository->find($album_id);
-        if ($album === null) {
+        if (null === $album) {
             return $this->redirectToRoute('app_albums');
         }
 
@@ -34,6 +34,7 @@ final class TrackController extends AbstractController
             $track->setListenCount(0);
             $em->persist($track);
             $em->flush();
+
             return $this->redirectToRoute('app_album_show', ['id' => $album->getId()]);
         }
 
@@ -52,6 +53,7 @@ final class TrackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+
             return $this->redirectToRoute('app_album_show', ['id' => $track->getAlbum()->getId()]);
         }
 
@@ -62,25 +64,25 @@ final class TrackController extends AbstractController
         ]);
     }
 
-#[Route('/track/{id}/listen', name: 'app_track_listen', methods: ['POST'])]
-public function listen(Track $track, EntityManagerInterface $em, Request $request): Response
-{
-    if ($this->isCsrfTokenValid('listen' . $track->getId(), $request->request->get('_token'))) {
-        $track->setListenCount($track->getListenCount() + 1);
+    #[Route('/track/{id}/listen', name: 'app_track_listen', methods: ['POST'])]
+    public function listen(Track $track, EntityManagerInterface $em, Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('listen'.$track->getId(), $request->request->get('_token'))) {
+            $track->setListenCount($track->getListenCount() + 1);
 
-        $user = $this->getUser();
-        if ($user) {
-            $history = new \App\Entity\ListeningHistory();
-            $history->setTrack($track);
-            $history->setUser($user);
-            $history->setListenedAt(new \DateTimeImmutable());
-            $history->setCreatedAt(new \DateTimeImmutable());
-            $em->persist($history);
+            $user = $this->getUser();
+            if ($user) {
+                $history = new \App\Entity\ListeningHistory();
+                $history->setTrack($track);
+                $history->setUser($user);
+                $history->setListenedAt(new \DateTimeImmutable());
+                $history->setCreatedAt(new \DateTimeImmutable());
+                $em->persist($history);
+            }
+
+            $em->flush();
         }
 
-        $em->flush();
+        return $this->redirectToRoute('app_album_show', ['id' => $track->getAlbum()->getId()]);
     }
-
-    return $this->redirectToRoute('app_album_show', ['id' => $track->getAlbum()->getId()]);
-}
 }

@@ -2,15 +2,15 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use App\Factory\AlbumFactory;
 use App\Factory\ArtistFactory;
 use App\Factory\GenreFactory;
-use App\Factory\UserFactory;
-use App\Factory\AlbumFactory;
-use App\Factory\TrackFactory;
-use App\Factory\PlaylistFactory;
 use App\Factory\ListeningHistoryFactory;
+use App\Factory\PlaylistFactory;
+use App\Factory\TrackFactory;
+use App\Factory\UserFactory;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {

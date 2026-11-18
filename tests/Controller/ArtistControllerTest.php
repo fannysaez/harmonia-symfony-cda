@@ -2,9 +2,9 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use App\Repository\UserRepository;
 use App\Repository\ArtistRepository;
+use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ArtistControllerTest extends WebTestCase
 {
@@ -22,7 +22,7 @@ class ArtistControllerTest extends WebTestCase
         $artistRepository = static::getContainer()->get(ArtistRepository::class);
         $artist = $artistRepository->findOneBy([]);
 
-        $client->request('GET', '/artist/' . $artist->getId());
+        $client->request('GET', '/artist/'.$artist->getId());
         $this->assertResponseIsSuccessful();
     }
 

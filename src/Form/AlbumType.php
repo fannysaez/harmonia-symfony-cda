@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Form;
 
 use App\Entity\Album;
@@ -26,7 +27,7 @@ class AlbumType extends AbstractType
                         maxSize: '2M',
                         mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
                         mimeTypesMessage: 'Formats acceptés : JPG, PNG, WebP',
-                    )
+                    ),
                 ],
                 'attr' => ['class' => 'form-control', 'accept' => 'image/*'],
             ])

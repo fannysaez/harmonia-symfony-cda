@@ -3,11 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Playlist;
-use App\Repository\PlaylistRepository;
-use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
-use Zenstruck\Foundry\Persistence\Proxy;
-use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 
 /**
  * @extends PersistentProxyObjectFactory<Playlist>
@@ -19,7 +15,9 @@ final class PlaylistFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     #[\Override]
     public static function class(): string

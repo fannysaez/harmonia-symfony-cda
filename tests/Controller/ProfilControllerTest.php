@@ -2,8 +2,8 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ProfilControllerTest extends WebTestCase
 {

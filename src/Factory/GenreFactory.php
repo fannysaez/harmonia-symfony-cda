@@ -3,11 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Genre;
-use App\Repository\GenreRepository;
-use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
-use Zenstruck\Foundry\Persistence\Proxy;
-use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 
 /**
  * @extends PersistentProxyObjectFactory<Genre>
@@ -19,7 +15,9 @@ final class GenreFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     #[\Override]
     public static function class(): string
@@ -41,14 +39,14 @@ final class GenreFactory extends PersistentProxyObjectFactory
             'electro', 'blues', 'metal', 'funk', 'soul', 'country',
             'folk', 'punk', 'disco', 'rnb', 'rap', 'house',
             'techno', 'ambient', 'salsa', 'bossa nova', 'ska',
-            'gospel', 'grime', 'dubstep', 'afrobeats', 'drill', 'synthwave'
+            'gospel', 'grime', 'dubstep', 'afrobeats', 'drill', 'synthwave',
         ];
 
         return [
             'color' => self::faker()->hexColor(),
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('-2 years', 'now')),
             'name' => self::faker()->unique()->randomElement($genres),
-            ];
+        ];
     }
 
     /**

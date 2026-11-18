@@ -30,7 +30,7 @@ class PlaylistController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
-        if ($user === null) {
+        if (null === $user) {
             return $this->redirectToRoute('app_login');
         }
 
@@ -82,6 +82,7 @@ class PlaylistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'Playlist modifiée !');
+
             return $this->redirectToRoute('app_profil');
         }
 

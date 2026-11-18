@@ -52,8 +52,52 @@ jobs:
       - name: Lint de la config des services et du typage
         run: php bin/console lint:container
 
+  phpstan:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, intl
+
+      - name: Récupération du cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor
+          key: deps-${{ hashFiles('composer.lock') }}
+
+      - name: Analyse statique (PHPStan)
+        run: vendor/bin/phpstan analyse
+
+  cs-fixer:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, intl
+
+      - name: Récupération du cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor
+          key: deps-${{ hashFiles('composer.lock') }}
+
+      - name: Vérification du style de code (PHP CS Fixer)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
   test:
-    needs: lint
+    needs: [lint, phpstan, cs-fixer]
     runs-on: ubuntu-latest
     services:
       db:

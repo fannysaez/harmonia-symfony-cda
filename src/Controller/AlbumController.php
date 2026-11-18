@@ -66,14 +66,13 @@ final class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var UploadedFile|null $coverFile */
             $coverFile = $form->get('coverImageFile')->getData();
 
             if ($coverFile) {
                 $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $coverFile->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
 
                 $coverFile->move(
                     $this->getParameter('covers_directory'),
@@ -100,7 +99,7 @@ final class AlbumController extends AbstractController
     public function edit(int $id, AlbumRepository $albumRepository, EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response
     {
         $album = $albumRepository->find($id);
-        if ($album === null) {
+        if (null === $album) {
             return $this->redirectToRoute('app_albums');
         }
 
@@ -108,14 +107,13 @@ final class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var UploadedFile|null $coverFile */
             $coverFile = $form->get('coverImageFile')->getData();
 
             if ($coverFile) {
                 $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $coverFile->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
 
                 $coverFile->move(
                     $this->getParameter('covers_directory'),
@@ -126,6 +124,7 @@ final class AlbumController extends AbstractController
             }
 
             $em->flush();
+
             return $this->redirectToRoute('app_albums');
         }
 

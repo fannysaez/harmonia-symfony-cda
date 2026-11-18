@@ -8,7 +8,9 @@ use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    public function __construct(private GenreRepository $genreRepository) {}
+    public function __construct(private GenreRepository $genreRepository)
+    {
+    }
 
     public function getFunctions(): array
     {
