@@ -4,6 +4,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Repository\UserRepository;
+use App\Repository\ArtistRepository;
 
 class ArtistControllerTest extends WebTestCase
 {
@@ -14,10 +15,14 @@ class ArtistControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
     }
+
     public function testArtistShowPage(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/artist/21');
+        $artistRepository = static::getContainer()->get(ArtistRepository::class);
+        $artist = $artistRepository->findOneBy([]);
+
+        $client->request('GET', '/artist/' . $artist->getId());
         $this->assertResponseIsSuccessful();
     }
 

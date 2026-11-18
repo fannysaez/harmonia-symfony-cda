@@ -27,7 +27,14 @@ class AppFixtures extends Fixture
         AlbumFactory::createMany(15);
         // Niveau 3 : Morceaux
         TrackFactory::createMany(60);
+
         // Niveau 1 bis : Utilisateurs (placé ici pour piocher dans les morceaux déjà créés)
+        // Utilisateur fixe utilisé par les tests (AdminControllerTest, ProfilControllerTest, etc.)
+        UserFactory::createOne([
+            'email' => 'fanny.saez.0486@gmail.com',
+            'pseudo' => 'fanny',
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
+        ]);
         UserFactory::createMany(20);
 
         // Niveau 4 : Playlists et Historique d'écoutes
