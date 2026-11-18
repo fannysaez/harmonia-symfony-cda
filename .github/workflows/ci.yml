@@ -1,0 +1,100 @@
+name: CI Backend Harmonia
+
+on: [push]
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, intl
+
+      - name: Dépendances
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Mise en cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: deps-${{ hashFiles('composer.lock') }}
+
+  lint:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, intl
+
+      - name: Récupération du cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor
+          key: deps-${{ hashFiles('composer.lock') }}
+
+      - name: Lint du YAML
+        run: php bin/console lint:yaml config
+
+      - name: Lint des templates Twig
+        run: php bin/console lint:twig templates
+
+      - name: Lint de la config des services et du typage
+        run: php bin/console lint:container
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: harmonia_cda_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/harmonia_cda?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
+      APP_ENV: test
+      FIXTURE_PASSWORD: password
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, intl
+
+      - name: Récupérer vendor depuis le cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor
+          key: deps-${{ hashFiles('composer.lock') }}
+
+      - name: Créer le schéma de la base de test
+        run: php bin/console doctrine:schema:create --env=test
+
+      - name: Charger les fixtures
+        run: php bin/console doctrine:fixtures:load --no-interaction --env=test
+
+      - name: Exécution des tests
+        run: php bin/phpunit
