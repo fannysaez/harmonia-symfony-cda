@@ -6,9 +6,6 @@ use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Album>
- */
 class AlbumRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -36,12 +33,30 @@ class AlbumRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
     public function findLastAdded(int $limit = 5): array
-{
-    return $this->createQueryBuilder('a')
-        ->orderBy('a.id', 'DESC')
-        ->setMaxResults($limit)
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWithRelations(string $type, ?int $limit = 12): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->addSelect('ar', 't')
+            ->join('a.artist', 'ar')
+            ->join('a.tracks', 't')
+            ->where('a.type = :type')
+            ->setParameter('type', $type)
+            ->orderBy('a.releaseDate', 'DESC');
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

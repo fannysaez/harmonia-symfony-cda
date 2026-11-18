@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 class Artist
@@ -17,12 +18,17 @@ class Artist
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom de scène doit avoir une valeur')]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $stageName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: 'La biographie doit être renseignée')]
     private ?string $biography = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le pays doit avoir une valeur')]
+    #[Assert\Length(max: 255)]
     private ?string $country = null;
 
     #[ORM\Column]
@@ -113,7 +119,6 @@ class Artist
     public function removeAlbum(Album $album): static
     {
         if ($this->albums->removeElement($album)) {
-            // set the owning side to null (unless already changed)
             if ($album->getArtist() === $this) {
                 $album->setArtist(null);
             }

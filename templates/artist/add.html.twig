@@ -15,6 +15,7 @@
                     <div class="mb-3">
                         <label class="form-label">Nom de scène</label>
                         {{ form_widget(form.stageName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.stageName) }}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Biographie</label>
@@ -23,6 +24,7 @@
                     <div class="mb-3">
                         <label class="form-label">Pays</label>
                         {{ form_widget(form.country, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.country) }}
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-orange" type="submit">Ajouter</button>

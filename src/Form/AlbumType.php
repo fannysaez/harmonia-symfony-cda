@@ -22,11 +22,11 @@ class AlbumType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '2M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
-                        'mimeTypesMessage' => 'Formats acceptés : JPG, PNG, WebP',
-                    ])
+                    new File(
+                        maxSize: '2M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+                        mimeTypesMessage: 'Formats acceptés : JPG, PNG, WebP',
+                    )
                 ],
                 'attr' => ['class' => 'form-control', 'accept' => 'image/*'],
             ])
