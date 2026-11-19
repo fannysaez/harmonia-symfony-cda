@@ -123,6 +123,7 @@ jobs:
           --health-retries=10
 
     env:
+      KERNEL_CLASS: 'App\Kernel'
       DATABASE_URL: "mysql://root:${{ secrets.DB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.DB_NAME }}?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
       APP_ENV: test
       APP_SECRET: ${{ secrets.APP_SECRET }}
