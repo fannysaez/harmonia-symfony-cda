@@ -137,6 +137,7 @@ jobs:
         with:
           php-version: "8.3"
           extensions: pdo_mysql, intl
+          ini-values: variables_order=EGPCS
 
       - name: Récupérer vendor depuis le cache
         uses: actions/cache/restore@v4
