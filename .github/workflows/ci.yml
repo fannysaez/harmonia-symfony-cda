@@ -108,7 +108,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -p${{ secrets.DB_ROOT_PASSWORD }}"
+          --health-cmd="mysqladmin ping"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
