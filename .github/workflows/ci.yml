@@ -103,20 +103,20 @@ jobs:
       db:
         image: mariadb:10.6
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: harmonia_cda_test
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -proot"
+          --health-cmd="mysqladmin ping -p${{ secrets.DB_ROOT_PASSWORD }}"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
 
     env:
-      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/harmonia_cda?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
+      DATABASE_URL: "mysql://root:${{ secrets.DB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.DB_NAME }}?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
       APP_ENV: test
-      FIXTURE_PASSWORD: password
+      FIXTURE_PASSWORD: ${{ secrets.FIXTURE_PASSWORD }}
 
     steps:
       - name: Checkout code
