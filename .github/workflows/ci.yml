@@ -104,7 +104,7 @@ jobs:
         image: mariadb:10.6
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}_test
         ports:
           - 3306:3306
         options: >-
